@@ -1,12 +1,15 @@
 com\tienda\tcg\repository\ProductRepository.class
 com\tienda\tcg\service\UserService.class
+com\tienda\tcg\config\SecurityConfig.class
 com\tienda\tcg\controller\ProductController.class
 com\tienda\tcg\model\User.class
 com\tienda\tcg\controller\AuthController.class
+com\tienda\tcg\CorsConfig$1.class
 com\tienda\tcg\TiendaApplication.class
 com\tienda\tcg\controller\CartController.class
 com\tienda\tcg\service\CartService.class
 com\tienda\tcg\model\CartItem.class
+com\tienda\tcg\CorsConfig.class
 com\tienda\tcg\model\Product.class
 com\tienda\tcg\repository\UserRepository.class
 com\tienda\tcg\repository\CartItemRepository.class
