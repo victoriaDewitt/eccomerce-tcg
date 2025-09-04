@@ -4,3 +4,5 @@ src/main/resources/application.properties
 
 # Ignorar archivos generados por Maven
 /target/
+/target/*.jar
+/target/*.jar.original
