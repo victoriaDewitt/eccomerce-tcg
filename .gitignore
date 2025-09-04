@@ -1,3 +1,6 @@
 # Ignorar configuración sensible
 src/main/resources/application.properties
 *.env
+
+# Ignorar archivos generados por Maven
+/target/
