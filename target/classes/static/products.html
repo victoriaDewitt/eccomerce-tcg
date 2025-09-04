@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hoenn Tcg store</title>
+  <link rel="stylesheet" href="estilo.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+
+<body>
+
+  <!-- Header principal -->
+  <header class="main-header">
+    <div class="logopoki">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/International_Pokémon_logo.svg" alt="Pokémon Logo" />
+    </div>
+   <!-- Menu-->
+<nav class="main-nav">
+  <ul>
+    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+    <li><a href="products.html?category=booster"><i class="fas fa-fire"></i> Booster</a></li>
+    <li><a href="products.html?category=etb"><i class="fas fa-box-open"></i> ETBs</a></li>
+    <li><a href="products.html?category=new_arrival"><i class="fas fa-star"></i> New Arrival</a></li>
+    <li><a href="products.html?category=collection"><i class="fas fa-layer-group"></i> Collection</a></li>
+    <li><a href="products.html?category=booster_box"><i class="fas fa-globe"></i> Booster Box</a></li>
+  </ul>
+</nav>
+     <!-- Botón de carrito -->
+    <button id="btn-cart" class="cart-button">
+     <img src="./img/svg/Captura_de_pantalla_2025-09-03_182023-removebg-preview.png" alt="Carrito" class="cart-icon">
+      <span id="cart-count">0</span>
+    </button>
+    
+      <div id="cart-container" class="cart-container"></div>
+    <button id="btn-login" class="btn-login">Sign In</button>
+  </header>
+
+  <!-- Modal oculto -->
+<div id="modal-login" class="modal">
+  <div class="modal-content">
+    <span id="modal-close" class="close">&times;</span>
+    <h2 id="modal-title">Login</h2>
+
+    <form id="auth-form">
+      <label for="username">User:</label>
+      <input type="text" id="username" name="username" placeholder="User" required />
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Password" required />
+
+      <!-- Campo extra solo para registro -->
+      <div id="email-container" style="display:none;">
+        <label for="email">email:</label>
+        <input type="email" id="email" name="email" placeholder="Email" />
+      </div>
+
+      <button type="submit" id="auth-submit">Login</button>
+    </form>
+
+    <!-- Mensajes de error o éxito -->
+    <p id="auth-message" style="margin-top:10px; font-weight:bold;"></p>
+
+    <!-- Toggle entre login/registro -->
+    <p id="toggle-text">
+      Don't have an account? <a href="#" id="toggle-auth">Register</a>
+    </p>
+  </div>
+</div>
+
+
+
+  <!-- Logo e imágenes -->
+  <div class="logo-container">
+    <img src="/img/mira.png" class="side-img flipped" />
+    <div class="logo">
+      <img src="/img/LETRAS HOENN.png" alt="HOENN TCG STORE" class="logo-text" />
+      <img src="/img/logo.png" class="side-img" />
+    </div>
+    <img src="/img/kora.png" class="logo-icon" />
+  </div>
+  
+
+
+  <!-- Contenedor de productos -->
+  <div id="product-list" class="product-list"></div>
+
+  <!-- Banner inferior y redes -->
+  <div class="banner_inferior">
+    <h2>Follow us</h2>
+    <div class="social_icons">
+      <a href="#"><img src="./img/svg/instagram-1-svgrepo-com.svg"/></a>
+      <a href="#"><img src="./img/svg/whatsapp-svgrepo-com.svg"/></a>
+      <a href="#"><img src="./img/svg/facebook-1-svgrepo-com.svg"/></a>
+    </div>
+    <div class="imagen banner">
+      <img src="" alt=""/>
+    </div>
+  </div>
+
+<script>
+  
+
+    // Contenedor de productos
+const container = document.getElementById("product-list");
+
+// Función para cargar productos según categoría
+function loadProducts(category) {
+  fetch(`http://localhost:8081/api/products/category/${category}`)
+    .then(res => {
+      if (!res.ok) throw new Error('Error al obtener productos');
+      return res.json();
+    })
+    .then(products => {
+      container.innerHTML = ''; // Limpiar productos previos
+
+      if (!products || products.length === 0) {
+        container.innerHTML = '<p>No hay productos en esta categoría.</p>';
+        return;
+      }
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `<div class="product-image">
+    <img src="${imagePng}" alt="${product.name}"
+         onerror="this.onerror=null; this.src='${imageJpg}'; this.onerror=function(){this.src='${fallbackImage}'};">
+  </div>
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <strong>$${product.price}</strong>
+          <button onclick="addToCart(${product.id})">Add to Cart</button>
+        `;
+        container.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error('Error al cargar productos:', err);
+      container.innerHTML = '<p>Error al cargar productos.</p>';
+    });
+}
+
+// Carga productos por defecto (puedes leer la categoría desde la URL si quieres)
+const params = new URLSearchParams(window.location.search);
+const category = params.get('category') || 'boosters';
+loadProducts(category);
+
+// ====== Mostrar usuario logueado al cargar la página ======
+window.addEventListener('DOMContentLoaded', () => {
+  const username = sessionStorage.getItem('username');
+  const btnLogin = document.getElementById('btn-login'); // <-- Aseguramos referencia
+  if (username && btnLogin) btnLogin.textContent = `Hi, ${username}`;
+  loadCart();
+});
+
+  //<!-- JS -->
+  </script>
+  
+  <script src="estilo.js"></script>
+  <script src="auth.js"></script>
+
+</body>
+</html>

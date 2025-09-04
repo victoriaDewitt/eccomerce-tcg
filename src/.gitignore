@@ -1,3 +1,0 @@
-# Ignorar configuración sensible
-src/main/resources/application.properties
-*.env
